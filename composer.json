@@ -1,0 +1,11 @@
+{
+    "name": "wuhan005/webdev-class-c2",
+    "description": "Web development homework 2",
+    "authors": [
+        {
+            "name": "John Wu",
+            "email": "524306184@qq.com"
+        }
+    ],
+    "require": {}
+}
