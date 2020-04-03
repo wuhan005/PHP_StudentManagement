@@ -9,7 +9,8 @@
 class Router
 {
     private static $routerTable = array(
-        'NotFound' => 'NotFound/index'
+        'GET' => array('NotFound' => 'NotFound/index'),
+        'POST' => array('NotFound' => 'NotFound/index'),
     );
 
     private $urlPath;
@@ -20,6 +21,7 @@ class Router
     {
         $this->pathProcessor();
         // include the file.
+        require_once('../handler/Handler.php');
         require_once('../handler/' . $this->handlerFile . '.php');
 
         $handler = new $this->handlerFile();
@@ -29,13 +31,13 @@ class Router
     public static function GET(string $path, string $handler)
     {
         $path = trim($path, '/');
-        self::$routerTable[$path] = $handler;
+        self::$routerTable['GET'][$path] = $handler;
     }
 
     public static function POST(string $path, string $handler)
     {
         $path = trim($path, '/');
-        self::$routerTable[$path] = $handler;
+        self::$routerTable['POST'][$path] = $handler;
     }
 
     private function pathProcessor()
@@ -47,12 +49,14 @@ class Router
             $this->urlPath = '';
         }
 
+        $requestMethod = $_SERVER['REQUEST_METHOD'];
+
         // check the router table
-        if (!isset(self::$routerTable[$this->urlPath])) {
+        if (!isset(self::$routerTable[$requestMethod][$this->urlPath])) {
             $this->urlPath = 'NotFound';
         }
 
-        $route = explode('/', self::$routerTable[$this->urlPath]);
+        $route = explode('/', self::$routerTable[$requestMethod][$this->urlPath]);
         $this->handlerFile = $route[0];
         $this->handlerMethod = $route[1];
     }

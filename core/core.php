@@ -20,8 +20,13 @@ require_once('database.php');
 // Init router
 require_once('router.php');
 
+// Checker router
+require_once('checker.php');
+
 // Router table
 Router::GET('/', 'Main/index');
+Router::GET('/add', 'Main/add');
+Router::POST('/add', 'Main/addAction');
 
 // Link start!
 new Router();
