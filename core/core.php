@@ -27,6 +27,8 @@ require_once('checker.php');
 Router::GET('/', 'Main/index');
 Router::GET('/add', 'Main/add');
 Router::POST('/add', 'Main/addAction');
+Router::GET('/edit', 'Main/edit');
+Router::POST('/edit', 'Main/editAction');
 
 // Link start!
 new Router();

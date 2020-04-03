@@ -57,11 +57,39 @@ class Database
         }
 
         $this->queryString = "INSERT INTO `$tableName` ($keyString) VALUES ($valueMask)";
+        $this->End();
+    }
+
+    public function Update(string $tableName, $data)
+    {
+        $this->mode = 'u';
+        $this->queryString = "UPDATE `$tableName` SET ";
+
+        $dataKey = array_keys($data);
+        $keyString = '';
+        foreach ($dataKey as $k => $item) {
+            $keyString .= '`' . $item . '` = ?';
+            if ($k !== count($dataKey) - 1) {
+                $keyString .= ', ';
+            }
+        }
+        $this->queryString .= $keyString;
+        $this->queryData = array_merge($this->queryData, $data);
+
+        return $this;
+    }
+
+    public function Delete(string $tableName)
+    {
+        $this->mode = 'd';
+    }
+
+    public function End()
+    {
         $db = DB::getInstance();
         $stmt = $db->prepare($this->queryString);
-
         $stmtType = '';
-        foreach ($data as $value) {
+        foreach ($this->queryData as $value) {
             if (is_integer($value)) {
                 $stmtType .= 'i';
             } else if (is_double($value)) {
@@ -73,26 +101,17 @@ class Database
 
         if ($stmt !== false) {
             if ($stmtType !== '') {
-                $stmt->bind_param($stmtType, ...array_values($data));
+                $stmt->bind_param($stmtType, ...array_values($this->queryData));
             }
             $stmt->execute();
         }
     }
 
-    public function Update(string $tableName)
-    {
-        $this->mode = 'u';
-    }
-
-    public function Delete(string $tableName)
-    {
-        $this->mode = 'd';
-    }
-
     public function Where(string $query, $data = array())
     {
-        $this->queryString .= "WHERE ($query)";
-        array_merge($this->queryData, $data);
+        $this->queryString .= " WHERE ($query)";
+        $this->queryData = array_merge($this->queryData, $data);
+        return $this;
     }
 
     public function Fetch()
