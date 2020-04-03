@@ -111,18 +111,18 @@ class Database
                 $stmtType .= 's';
             }
         }
+        $data = [];
         if ($stmt !== false) {
             if ($stmtType !== '') {
                 $stmt->bind_param($stmtType, ...$this->queryData);
             }
             $stmt->execute();
-            $data = $stmt->get_result();
-            $data = $data->fetch_array();
-            if (is_null($data)) {
-                return [];
+            $result = $stmt->get_result();
+
+            while ($r = $result->fetch_array(MYSQLI_ASSOC)) {
+                array_push($data, $r);
             }
-            return $data;
         }
-        return [];
+        return $data;
     }
 }
