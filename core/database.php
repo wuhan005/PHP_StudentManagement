@@ -17,7 +17,12 @@ class DB
     public static function getInstance()
     {
         if (self::$DB == NULL) {
-            $db = new mysqli();
+            $db = new mysqli(
+                Config::Get("DB_HOST"),
+                Config::Get("DB_USER"),
+                Config::Get("DB_PASSWORD"),
+                Config::Get("DB_NAME")
+            );
             self::$DB = $db;
         }
         return self::$DB;

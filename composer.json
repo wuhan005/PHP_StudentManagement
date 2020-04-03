@@ -7,5 +7,7 @@
             "email": "524306184@qq.com"
         }
     ],
-    "require": {}
+    "require": {
+        "filp/whoops": "^2.7"
+    }
 }
