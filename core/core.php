@@ -29,6 +29,8 @@ Router::GET('/add', 'Main/add');
 Router::POST('/add', 'Main/addAction');
 Router::GET('/edit', 'Main/edit');
 Router::POST('/edit', 'Main/editAction');
+Router::GET('/delete', 'Main/delete');
+Router::POST('/delete', 'Main/deleteAction');
 
 // Link start!
 new Router();

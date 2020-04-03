@@ -82,6 +82,8 @@ class Database
     public function Delete(string $tableName)
     {
         $this->mode = 'd';
+        $this->queryString = "DELETE FROM `$tableName` ";
+        return $this;
     }
 
     public function End()
@@ -110,7 +112,13 @@ class Database
     public function Where(string $query, $data = array())
     {
         $this->queryString .= " WHERE ($query)";
-        $this->queryData = array_merge($this->queryData, $data);
+
+        // single param
+        if (!is_array($data)) {
+            $this->queryData = array_merge($this->queryData, array($data));
+        } else {
+            $this->queryData = array_merge($this->queryData, $data);
+        }
         return $this;
     }
 

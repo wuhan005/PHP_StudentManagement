@@ -94,7 +94,28 @@ class Main extends \Handler
             return;
         }
 
-        $this->DB->Update('students', $data)->Where('`id` = ?', array($id))->End();
+        $this->DB->Update('students', $data)->Where('`id` = ?', $id)->End();
         $this->redirect('/edit?id=' . $id);
+    }
+
+    public function delete()
+    {
+        $id = (int)$this->GET('id');
+        $data = $this->DB->Select('students')->Where('`id` = ?', $id)->Fetch();
+        if (empty($data)) {
+            $this->redirect('/');
+            return;
+        }
+
+        $this->show('header.html');
+        $this->show('del.php', array_merge(array('id' => $id), $data[0]));
+        $this->show('footer.html');
+    }
+
+    public function deleteAction()
+    {
+        $id = (int)$this->POST('id');
+        $this->DB->Delete('students')->Where('`id` = ?', $id)->End();
+        $this->redirect('/');
     }
 }
